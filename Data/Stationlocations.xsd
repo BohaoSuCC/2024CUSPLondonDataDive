@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.opengis.net/kml/2.2" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="kml">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Document">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="name" type="xs:string" />
+							<xs:element name="open" type="xs:unsignedByte" />
+							<xs:element name="description" type="xs:string" />
+							<xs:element maxOccurs="unbounded" name="Style">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="IconStyle">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Icon">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="href" type="xs:string" />
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="id" type="xs:string" use="required" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element maxOccurs="unbounded" name="Placemark">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="name" type="xs:string" />
+										<xs:element name="description" type="xs:string" />
+										<xs:element name="Point">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="coordinates" type="xs:string" />
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="styleUrl" type="xs:string" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

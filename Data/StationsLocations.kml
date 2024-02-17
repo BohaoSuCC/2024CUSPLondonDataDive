@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+	<Document>
+		<name>Transport for London Stations</name>
+		<open>0</open>
+		<description>Transport for London Stations</description>
+		<Style id="tubeStyle">
+			<IconStyle>
+				<Icon>
+					<href>http://www.tfl.gov.uk/tfl-global/images/syndication/roundel-tube.png</href>
+				</Icon>
+			</IconStyle>
+		</Style>
+		<Style id="dlrStyle">
+			<IconStyle>
+				<Icon>
+					<href>http://www.tfl.gov.uk/tfl-global/images/syndication/roundel-dlr.png</href>
+				</Icon>
+			</IconStyle>
+		</Style>
+		<Style id="overgroundStyle">
+			<IconStyle>
+				<Icon>
+					<href>http://www.tfl.gov.uk/tfl-global/images/syndication/roundel-overground.png</href>
+				</Icon>
+			</IconStyle>
+		</Style>
+		<Placemark>
+			<name>Acton Town Station</name>
+			<description>Acton Town Station, London Underground Ltd., Gunnersbury Lane, London, W3 8HN</description>
+			<Point>
+				<coordinates>-.280251203536110600,51.502749773000570000,0</coordinates>
+			</Point>
+			<styleUrl>#tubeStyle</styleUrl>
+		</Placemark>
+		<Placemark>
+			<name>Aldgate East Station</name>
+			<description>Aldgate East Station, London Underground Ltd., Whitechapel High St, London, E1 7PT</description>
+			<Point>
+				<coordinates>
+					-.072287119975365420,51.515233413796480000,0
+				</coordinates>
+			</Point>
+			<styleUrl>#tubeStyle</styleUrl>
+		</Placemark>
+		<Placemark>
+			<name>East India Station</name>
+			<description>
+				London Underground, 55 Broadway, London, SW1H 0BD
+			</description>
+			<Point>
+				<coordinates>
+					-.002748663563422358,51.509041249107980000,0
+				</coordinates>
+			</Point>
+			<styleUrl>#dlrStyle</styleUrl>
+		</Placemark>
+		<Placemark>
+			<name>Gallions Reach Station</name>
+			<description>
+				London Underground, 55 Broadway, London, SW1H 0BD
+			</description>
+			<Point>
+				<coordinates>
+					.072220032947865110,51.509538091545025000,0
+				</coordinates>
+			</Point>
+			<styleUrl>#dlrStyle</styleUrl>
+		</Placemark>
+	</Document>
+</kml>

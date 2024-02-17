@@ -1,0 +1,36 @@
+!table
+!version 800
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 5
+    Objectid Decimal (10, 0) ;
+    Boundary Char (10) ;
+    Descriptio Char (50) ;
+    Shape_area Float ;
+    Shape_len Float ;
+begin_metadata
+"\Shapefile" = ""
+"\Shapefile\PersistentCache" = "FALSE"
+"\Shapefile\CacheType" = "NATIVE"
+"\Spatial Reference" = ""
+"\Spatial Reference\Geographic" = ""
+"\Spatial Reference\Geographic\Projection" = ""
+"\Spatial Reference\Geographic\Projection\Clause" = "CoordSys Earth Projection 8, 79, ""m"", -2, 49, 0.9996012717, 400000, -100000 Bounds (0, -100000) (2000000, 1900000)"
+"\DefaultStyles" = ""
+"\DefaultStyles\Pen" = ""
+"\DefaultStyles\Pen\LineWidth" = "1"
+"\DefaultStyles\Pen\LineStyle" = "0"
+"\DefaultStyles\Pen\Color" = "0"
+"\DefaultStyles\Pen\Pattern" = "2"
+"\DefaultStyles\Brush" = ""
+"\DefaultStyles\Brush\Pattern" = "2"
+"\DefaultStyles\Brush\Forecolor" = "16777215"
+"\DefaultStyles\Brush\Backcolor" = "16777215"
+"\DefaultStyles\Brush\Transparent" = "FALSE"
+"\MapInfo" = ""
+"\MapInfo\TableID" = "622088e4-9c45-436a-a639-8c3d0d9c3623"
+"\MapInfo\ParentTableID" = "4ead54bb-4a31-487f-949a-83959c9afbd5"
+"\IsReadOnly" = "FALSE"
+end_metadata

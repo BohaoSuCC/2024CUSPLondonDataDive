@@ -1,0 +1,1 @@
+# LoadFromAPI is a class that is used to load data from the API
