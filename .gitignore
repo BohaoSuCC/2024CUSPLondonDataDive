@@ -152,5 +152,4 @@ cython_debug/
 #.idea/
 2024 CUSP London Data Dive Programme 1.pdf
 CUSP London Data Dive 2024 Daily Schedule.xlsx
-Data/CongestionSoot
 *.csv
