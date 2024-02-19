@@ -1,0 +1,234 @@
+<html>
+	<head>
+  <!--
+
+  Amazon S3 Bucket listing.
+
+
+  Copyright (C) 2008 Francesco Pasqualini
+
+      This program is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+  -->
+  <!--
+
+  Modified by Nolan Lawson!  (http://nolanlawson.com).  I'm keeping the spirit of the
+  GPL alive by issuing this with the same license!
+
+  -->
+
+	  <title>Bucket loading...</title>
+	  <link href="//netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+	  <style>
+	    .hide-while-loading {
+	      display:none;
+	    }
+	    .i-expand-collapse {
+	      opacity: 0.3;
+	    }
+	    .i-file-or-folder {
+	      margin-right: 4px;
+	    }
+	  </style>
+
+	  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.1.2/handlebars.min.js"></script>
+	  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/moment.min.js"></script>
+	  
+	  <!-- TfL Update Start --> 
+		<link rel="shortcut icon" type="image/x-icon" href="http://maintenance.tfl.gov.uk/favicon.ico">
+		<meta name="viewport" content="width=device-width, initial-scale = 1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="HandheldFriendly" content="True">
+		<style type="text/css">
+			body{margin:0;padding:0}.top-row{border-bottom:3px solid #121315;background-color:#2d3039;height:60px}.logo{background-color:#113B92;width:50px;height:43px;padding:10px}h1{padding-bottom:8px;border-bottom:1px solid #ccc}#full-width-content{padding:0 25px}
+		</style>
+	<!-- TfL Update End --> 
+	</head>
+	<body>
+		<!-- TfL Update Start -->
+		<div class="top-row">
+			<div class="logo">
+				<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQwIiBoZWlnaHQ9IjUyMCI+DQogPHRpdGxlPlRmTCB3aGl0ZSByb3VuZGVsPC90aXRsZT4NCiA8ZyBmaWxsPSJub25lIj4NCiAgPGNpcmNsZSBzdHJva2U9IndoaXRlIiBjeD0iMzIwIiBjeT0iMjYwIiByPSIyMTUiIHN0cm9rZS13aWR0aD0iOTAiLz4NCiAgPHBhdGggc3Ryb2tlPSJ3aGl0ZSIgZD0iTSAwLDI2MCBIIDY0MCIgc3Ryb2tlLXdpZHRoPSIxMDAiLz4NCiA8L2c+DQo8L3N2Zz4NCg==" height="40">
+			</div>
+		</div>
+		<!-- TfL Update End -->
+	  <div class="container">
+  	  <h1 id="h1-title">Bucket loading...</h1>
+			<!-- TfL Update Start -->
+			<p>
+				The public TfL data (or 'open data') released here is for open data users to use in their own software and services. We encourage software developers to use this data to present customer travel information in innovative ways - providing they adhere to the transport data terms and conditions <a href="https://tfl.gov.uk/corporate/terms-and-conditions/transport-data-service">https://tfl.gov.uk/corporate/terms-and-conditions/transport-data-service</a>
+			</p>
+			<!-- TfL Update End -->
+  	  <table class="hide-while-loading table table-striped">
+  	    <thead>
+  	      <tr>
+  	        <th>Name</th>
+  	        <th>Date Modified</th>
+  	        <th>Size</th>
+  	        <th>Type</th>
+						<th>Description</th>
+  	      </tr>
+  	    </thead>
+  	    <tbody id="tbody-content">
+  	    </tbody>
+  	  </table>
+	  </div>
+
+  <script id="file-or-folder" type="text/x-handlebars-template">
+    <tr data-level="{{nestLevel}}">
+      {{#if isFolder}}
+        <td><i class="icon-chevron-down i-expand-collapse" style="margin-left:calc(({{numLevels}} - 1) * 16px)");></i><i class="icon-folder-open i-file-or-folder" style="margin-left:4px;"></i>
+        {{simpleFilename}}</td>
+      {{else}}
+        <td><i class="icon-file i-file-or-folder"  style="margin-left:calc(({{numLevels}} * 16px) + 4px);"></i>
+        <a href="{{url}}">{{simpleFilename}}</a></td>
+      {{/if}}
+      <td>{{friendlyLastModified}}</td>
+      <td>{{friendlySizeName}}</td>
+      <td>{{type}}</td>
+			<td data-url="{{id}}">{{description}}</td>
+    </tr>
+  </script>
+	<script>
+	(function($){
+	  "use strict";
+	  var FOLDER_PATTERN = new RegExp('_\\$folder\\$$');
+	  var TYPE_PATTERN = new RegExp('\\.([^\\.\\s]{1,10})$');
+		var KB = 1024;
+		var MB = 1000000;
+		var GB = 1000000000;
+
+    	// replace last /index.html to get bucket root
+	  var bucketUrl = document.location.href.replace(/\/[^\/]+$/, '');
+	  var listBucketUrl = "https://s3-eu-west-1.amazonaws.com/" + document.location.hostname + document.location.pathname;
+		var compiledTemplate;
+
+    // return e.g. 1.2KB, 1.3MB, 2GB, etc.
+	  function toFriendlySizeName(size){
+	    if (size === 0) {
+	      return '';
+	    } else if (size < KB) {
+	      return size + ' B';
+	    } else if (size < MB) {
+	      return (size / KB).toFixed(0) + ' KB';
+	    } else if (size < GB) {
+	      return (size / MB).toFixed(2) + ' MB';
+	    }
+	    return (size / GB).toFixed(2) + ' GB';
+	  }
+
+
+	  // POJO describing a file or a folder
+	  function FileOrFolder(lastModified, etag, size, key){
+	    var self = this;
+
+	    self.lastModified = lastModified;
+	    self.etag = etag;
+	    self.size = size;
+	    self.key = key;
+			self.description = '';
+
+	    // init logic
+	    self.isFolder = (size == 0); //FOLDER_PATTERN.test(self.key);// self.key.replace(FOLDER_PATTERN,'')
+	    self.filename = self.isFolder ? self.key : self.key;
+	    self.url = bucketUrl + self.key;
+	    self.levels = self.filename.split('/');
+			self.numLevels = self.levels.length;
+			self.nestLevel = self.levels.length + (self.isFolder ? 0 : 1);
+	    self.simpleFilename = (self.isFolder) ? self.key : self.levels[self.numLevels - 1];
+	    self.friendlySizeName = toFriendlySizeName(parseInt(self.size,10));
+	    var foundTypes = TYPE_PATTERN.exec(self.simpleFilename);
+	    self.type = self.isFolder ? 'Folder ' : (foundTypes ? (foundTypes[1].toUpperCase() + ' file') : 'Unknown');
+	    self.friendlyLastModified = moment(lastModified).format('MMM Do YYYY, hh:mm:ss a');
+			self.id = (bucketUrl + self.key).replace(/\.|_|:|-|\//g, '');
+
+			if(self.size > 0) {
+				$.ajax({
+					url: listBucketUrl + self.key,
+					type: 'HEAD',
+					complete: function(xhr) {
+						self.description = xhr.getResponseHeader('x-amz-meta-description');
+						if(self.description)
+							$('[data-url="' + self.id + '"]').text(self.description);
+					}
+				});
+			}
+
+	  }
+
+		function onAjaxSuccess(xml) {
+			var listBucketResult = $(xml).find('ListBucketResult');
+
+			// set a reasonable title instead of "Bucket loading"
+			var title = listBucketResult.find('Name').text();
+			document.title = title;
+			$('#h1-title').text(title);
+
+			var $tbodyContent = $('#tbody-content');
+
+			// create the file or folder objects
+
+			var filesOrFolders = [];
+
+			listBucketResult.find('Contents').each(function(idx, element){
+
+				var $element = $(element);
+
+				var fileOrFolder = new FileOrFolder(
+					 $element.find('LastModified').text(),
+					 $element.find('ETag').text(),
+					 $element.find('Size').text(),
+					 $element.find('Key').text()
+				);
+
+				filesOrFolders.push(fileOrFolder);
+			});
+
+			// sort
+			filesOrFolders.sort(function(left, right){
+				if (left.levels === right.levels) {
+					return 0;
+				} else if (left.levels < right.levels) {
+					return -1;
+				}
+				return 1;
+			});
+
+			// filter
+			filesOrFolders = filesOrFolders.filter(function(item, index){
+				return item.key !== "index.html";
+			});
+
+			// fill in the rows
+			var str = '';
+			for (var i = 0; i < filesOrFolders.length; i ++) {
+				str += compiledTemplate(filesOrFolders[i]);
+			}
+			$tbodyContent.append(str);
+
+			$('.hide-while-loading').show();
+		}
+
+		$.ajax({
+         url: listBucketUrl,
+         success: onAjaxSuccess
+		});
+
+    // compile while ajax is in progress
+		compiledTemplate = Handlebars.compile($('#file-or-folder').html()); 
+
+	})(jQuery);
+	</script>
+	</body>
+</html>
