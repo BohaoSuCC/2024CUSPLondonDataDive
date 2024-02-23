@@ -161,3 +161,6 @@ CUSP London Data Dive 2024 Daily Schedule.xlsx
 Data/Transport/Cycling/asset_information_guide.pdf
 Data/Transport/Cycling/cid_database_schema.xlsx
 *.kml
+*.pt
+*.h5
+*.pptx
