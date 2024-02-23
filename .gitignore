@@ -164,3 +164,5 @@ Data/Transport/Cycling/cid_database_schema.xlsx
 *.pt
 *.h5
 *.pptx
+*.png
+*.gif
