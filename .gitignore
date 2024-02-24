@@ -165,5 +165,7 @@ Data/Transport/Cycling/cid_database_schema.xlsx
 *.h5
 *.pptx
 *.png
-*.gif
 *.mp4
+Images/wards_animation.gif
+Images/wards_animation_1.gif
+Images/no2_con_vid.gif
